@@ -20,12 +20,8 @@
  *************************************************************************/
 
 #include "ranluxpp.h"
-#include "cpuarch.h"
 #include "mulmod.h"
 #include <stdio.h>
-#include <iostream>
-#include <limits>
-#include <cstring>
 
 // modular exponentiation:
 // x <- x^n mod (2^576 - 2^240 + 1)
@@ -50,7 +46,7 @@ const uint64_t *ranluxpp::geta(){
   return a;
 }
 
-ranluxpp::ranluxpp(uint64_t seed, uint64_t p) : _dpos(11), _fpos(24) , _ipos(9){
+ranluxpp::ranluxpp(uint64_t seed, uint64_t p) : _dpos(11), _fpos(24) {
   _x[0] = 1;
   for(int i=1;i<9;i++) _x[i] = 0;
   for(int i=0;i<9;i++) _A[i] = geta()[i];
@@ -69,10 +65,6 @@ void ranluxpp::nextfloats() {
   
 void ranluxpp::nextdoubles() {
   nextstate(); unpackdoubles((double*)_doubles); _dpos = 0;
-}
-
-void ranluxpp::nextints() {
-  nextstate(); for(int i=0;i<9;i++) _uints[i]=_x[i]; _ipos = 0;
 }
   
 // unpack state into single precision format

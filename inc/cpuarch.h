@@ -21,11 +21,11 @@
 
 #pragma once
 
-// __attribute__((target ("arch=haswell")))
-// const char * getarch();
-// __attribute__((target ("arch=broadwell")))
-// const char * getarch();
-// __attribute__((target ("arch=skylake")))
+__attribute__((target ("arch=haswell")))
 const char * getarch();
-// __attribute__ ((target ("default")))
-// const char * getarch();
+__attribute__((target ("arch=broadwell")))
+const char * getarch();
+__attribute__((target ("arch=skylake")))
+const char * getarch();
+__attribute__ ((target ("default")))
+const char * getarch();

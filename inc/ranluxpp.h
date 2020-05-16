@@ -34,6 +34,7 @@
  * i.e. a * b mod m = 1                                                  *
  *************************************************************************/
 #include <stdint.h>
+
 #pragma once
 
 #define   likely(x) __builtin_expect(!!(x), 1)
@@ -45,10 +46,8 @@ protected:
   uint64_t _A[9]; // multiplier
   uint64_t _doubles[11]; // cache for double precision numbers 
   uint32_t _floats[24];  // cache for single precision numbers 
-  uint64_t _uints[9]; // state vector
   uint32_t _dpos; // position in cache for doubles
   uint32_t _fpos; // position in cache for floats
-  uint32_t _ipos; // position in cache for floats
 
   // get a = m - (m-1)/b = 2^576 - 2^552 - 2^240 + 2^216 + 1
   static const uint64_t *geta();
@@ -58,9 +57,6 @@ protected:
   
   // fill the cache with double type numbers
   void nextdoubles();
-    
-    // fill the cache with int type numbers
-  void nextints();
   
   // transfrom the binary state vector of LCG to 24 floats 
   void unpackfloats(float *a);
@@ -102,23 +98,6 @@ public:
   double operator()(double __attribute__((unused))) __attribute__((noinline)){
     if(unlikely(_dpos >= 11)) nextdoubles();
     return *(double*)(_doubles + _dpos++);
-  }
-    // return double precision random numbers uniformly distributed in [0,1).
-  double get_double(){
-    if(unlikely(_dpos >= 11)) nextdoubles();
-    return *(double*)(_doubles + _dpos++);
-  }
-    
-      // return single precision random numbers uniformly distributed in [0,1).
-  double get_float(){
-    if(unlikely(_fpos >= 24)) nextfloats();
-    return *(float*)(_floats + _fpos++);
-  }
-    
-        // return single precision random numbers uniformly distributed in [0,1).
-  uint64_t get_uint(){
-    if(unlikely(_ipos >= 9)) nextints();
-    return _uints[_ipos++];
   }
 
   // Fill array size of n by single precision random numbers uniformly

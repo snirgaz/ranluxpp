@@ -29,38 +29,38 @@ extern "C" {
   void _remainder(uint64_t *b);
   // The input and output memory areas must not overlap
   // out = a*b
-  //void _mul9x9_mulx(uint64_t *out, const uint64_t *a, const uint64_t *b);
+  void _mul9x9_mulx(uint64_t *out, const uint64_t *a, const uint64_t *b);
   void _mul9x9_mulxadox(uint64_t *out, const uint64_t *a, const uint64_t *b);
   // out = a*b % (2^576 - 2^240 + 1)
-  //void _mul9x9mod_mulx(uint64_t *out, const uint64_t *a, const uint64_t *b);
+  void _mul9x9mod_mulx(uint64_t *out, const uint64_t *a, const uint64_t *b);
   void _mul9x9mod_mulxadox(uint64_t *out, const uint64_t *a, const uint64_t *b);
 };
 
-// __attribute__((target ("arch=haswell")))
-// void mul9x9mod(uint64_t *b, const uint64_t *a) {
-//   uint64_t buf[9];
-//   _mul9x9mod_mulx(buf,a,b);
-//   memcpy(b, buf, sizeof(uint64_t)*9);
-// }
+__attribute__((target ("arch=haswell")))
+void mul9x9mod(uint64_t *b, const uint64_t *a) {
+  uint64_t buf[9];
+  _mul9x9mod_mulx(buf,a,b);
+  memcpy(b, buf, sizeof(uint64_t)*9);
+}
 
-// __attribute__((target ("arch=broadwell")))
-// void mul9x9mod(uint64_t *b, const uint64_t *a){
-//   uint64_t buf[9];
-//   _mul9x9mod_mulxadox(buf,a,b);
-//   memcpy(b, buf, sizeof(uint64_t)*9);
-// }
-
-//__attribute__((target ("arch=skylake")))
+__attribute__((target ("arch=broadwell")))
 void mul9x9mod(uint64_t *b, const uint64_t *a){
   uint64_t buf[9];
   _mul9x9mod_mulxadox(buf,a,b);
   memcpy(b, buf, sizeof(uint64_t)*9);
 }
 
-// __attribute__ ((target ("default")))
-// void mul9x9mod(uint64_t *b, const uint64_t *a) {
-//   uint64_t buf[18];
-//   memcpy(buf, b, sizeof(uint64_t)*9); _mul9x9_mul(buf, a);
-//   _remainder(buf);
-//   memcpy(b, buf, sizeof(uint64_t)*9);
-// }
+__attribute__((target ("arch=skylake")))
+void mul9x9mod(uint64_t *b, const uint64_t *a){
+  uint64_t buf[9];
+  _mul9x9mod_mulxadox(buf,a,b);
+  memcpy(b, buf, sizeof(uint64_t)*9);
+}
+
+__attribute__ ((target ("default")))
+void mul9x9mod(uint64_t *b, const uint64_t *a) {
+  uint64_t buf[18];
+  memcpy(buf, b, sizeof(uint64_t)*9); _mul9x9_mul(buf, a);
+  _remainder(buf);
+  memcpy(b, buf, sizeof(uint64_t)*9);
+}

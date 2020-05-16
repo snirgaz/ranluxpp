@@ -21,22 +21,22 @@
 
 #include "cpuarch.h"
 
-// __attribute__((target ("arch=haswell")))
-// const char * getarch() {
-//   return "Haswell";
-// }
+__attribute__((target ("arch=haswell")))
+const char * getarch() {
+  return "Haswell";
+}
 
-// __attribute__((target ("arch=broadwell")))
-// const char * getarch(){
-//   return "Broadwell";
-// }
+__attribute__((target ("arch=broadwell")))
+const char * getarch(){
+  return "Broadwell";
+}
 
-// __attribute__((target ("arch=skylake")))
+__attribute__((target ("arch=skylake")))
 const char * getarch(){
   return "Skylake";
 }
 
-// __attribute__ ((target ("default")))
-// const char * getarch() {
-//   return "default";
-// }
+__attribute__ ((target ("default")))
+const char * getarch() {
+  return "default";
+}
