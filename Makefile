@@ -1,15 +1,18 @@
 CXX = g++
-CXXFLAGS = -O3 -Iinc -mavx2
-RLIB = libranlux++.a
+CXXFLAGS = -O3 -Iinc -mavx2 -fPIC
+RLIB = libranluxpp.a
+SHAREDLIB = libranluxpp.so
+LDFLAGS = -shared
 
 # use assembly optimized version of the skipping
+
 ASMSKIP = yes
 ifeq ($(ASMSKIP),yes)
   CXXFLAGS += -DASMSKIP
   ASMOBJ = src/skipstates.o
 endif
 
-all: ranluxpp_test ranlux_test std_random_test
+all: ranluxpp_test ranlux_test std_random_test $(SHAREDLIB)
 
 %.o: %.asm
 	$(AS) -c -o $@ $<
@@ -19,6 +22,9 @@ all: ranluxpp_test ranlux_test std_random_test
 
 $(RLIB): src/ranluxpp.o src/mulmod.o src/mul9x9mod.o src/divmult.o src/lcg2ranlux.o src/ranlux.o src/cpuarch.o $(ASMOBJ)
 	ar cru $@ $^
+
+$(SHAREDLIB): src/ranluxpp.o src/mulmod.o src/mul9x9mod.o src/divmult.o src/lcg2ranlux.o src/ranlux.o src/cpuarch.o $(ASMOBJ)
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LDFLAGS)
 
 ranlux_test: tests/ranlux_test.cxx $(RLIB)
 	$(CXX) -o $@ $^ $(CXXFLAGS)
