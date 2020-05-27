@@ -45,9 +45,11 @@ protected:
   uint64_t _x[9]; // state vector
   uint64_t _A[9]; // multiplier
   uint64_t _doubles[11]; // cache for double precision numbers 
-  uint32_t _floats[24];  // cache for single precision numbers 
+  uint32_t _floats[24];  // cache for single precision numbers
+  uint64_t _uints[9]; // cache for uint  numbers 
   uint32_t _dpos; // position in cache for doubles
   uint32_t _fpos; // position in cache for floats
+  uint32_t _ipos; // cache for uint  numbers 
 
   // get a = m - (m-1)/b = 2^576 - 2^552 - 2^240 + 2^216 + 1
   static const uint64_t *geta();
@@ -57,6 +59,9 @@ protected:
   
   // fill the cache with double type numbers
   void nextdoubles();
+    
+    // fill the cache with double type numbers
+  void nextuints();
   
   // transfrom the binary state vector of LCG to 24 floats 
   void unpackfloats(float *a);
@@ -98,6 +103,21 @@ public:
   double operator()(double __attribute__((unused))) __attribute__((noinline)){
     if(unlikely(_dpos >= 11)) nextdoubles();
     return *(double*)(_doubles + _dpos++);
+  }
+
+  float get_float(){
+    if(unlikely(_fpos >= 24)) nextfloats();
+    return *(float*)(_floats + _fpos++);
+  }
+
+  double get_double(){
+    if(unlikely(_dpos >= 11)) nextdoubles();
+    return *(double*)(_doubles + _dpos++);
+  }
+
+  uint64_t get_uint(){
+    if(unlikely(_ipos >= 9)) nextuints();
+    return _uints[_ipos++];
   }
 
   // Fill array size of n by single precision random numbers uniformly

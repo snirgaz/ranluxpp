@@ -22,14 +22,14 @@
 #include <stdint.h>
 #pragma once
 
-__attribute__((target ("arch=haswell")))
+// __attribute__((target ("arch=haswell")))
+// void mul9x9mod(uint64_t *b, const uint64_t *a);
+
+// __attribute__((target ("arch=broadwell")))
+// void mul9x9mod(uint64_t *b, const uint64_t *a);
+
+// __attribute__((target ("arch=skylake")))
 void mul9x9mod(uint64_t *b, const uint64_t *a);
 
-__attribute__((target ("arch=broadwell")))
-void mul9x9mod(uint64_t *b, const uint64_t *a);
-
-__attribute__((target ("arch=skylake")))
-void mul9x9mod(uint64_t *b, const uint64_t *a);
-
-__attribute__((target ("default")))
-void mul9x9mod(uint64_t *b, const uint64_t *a);
+// __attribute__((target ("default")))
+// void mul9x9mod(uint64_t *b, const uint64_t *a);

@@ -66,6 +66,10 @@ void ranluxpp::nextfloats() {
 void ranluxpp::nextdoubles() {
   nextstate(); unpackdoubles((double*)_doubles); _dpos = 0;
 }
+
+void ranluxpp::nextuints() {
+  nextstate(); for (int i=0;i<9;i++) _uints[i]=_x[i]; _ipos = 0;
+}
   
 // unpack state into single precision format
 void ranluxpp::unpackfloats(float *a) {
